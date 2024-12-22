@@ -1,5 +1,6 @@
 # TILDNN
 
+Visualisation focussed journal on Deep Neural Nets
 
 ### 2024-12-22
 

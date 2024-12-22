@@ -1,6 +1,8 @@
-remote_theme: pages-themes/minimal@v0.2.0
+remote_theme: jekyll/minima
 plugins:
-- jekyll-remote-theme # add this line to the plugins list if you already have one
+  - jekyll-remote-theme
+minima:
+  skin: dark
 
 title: Today I Learned // Deep Neural Nets
 description: learning journal

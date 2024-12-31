@@ -8,9 +8,8 @@ Today I Learned // Deep Neural Nets
 
 ## projects
 
-- [Neural IDE](projects/neuralide.html)
+- [Toy Neural Net Visualizer](projects/neuralide.html)
 
 ## links
 - [twitter](https://x.com/attentionmech)
 - [github](https://github.com/attentionmech)
-- [cracked-org](https://github.com/cracked-org)

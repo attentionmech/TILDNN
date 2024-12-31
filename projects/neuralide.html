@@ -7,6 +7,29 @@
   <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <style>
+
+    footer {
+      background-color: #000;
+      color: white;
+      text-align: left;
+      padding: 10px 0;
+      position: fixed;
+      bottom: 0;
+      width: 30%;
+      font-size: 13px; /* Smaller font size */
+  }
+  footer a {
+      color: #00aced; /* Twitter blue color */
+      text-decoration: none;
+      margin: 0 8px;
+  }
+  footer a:hover {
+      text-decoration: underline;
+  }
+    .social-icons {
+        font-size: 20px;
+    }
+
     body {
       background-color: #0a0a1a;
       color: #00ffff;
@@ -212,6 +235,13 @@
 
     <div id="status">{{ status }}</div>
   </div>
+
+  <footer>
+    <div class="social-icons">
+      <a href="https://github.com/attentionmech/TILDNN/blob/main/projects/neuralide.html" target="_blank">source code</a>
+        <a href="https://twitter.com/attentionmech" target="_blank">twitter</a>
+    </div>
+  </footer>
 
   <script>
     new Vue({

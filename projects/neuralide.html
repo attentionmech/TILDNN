@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advanced Neural Network Visualization</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    body {
+      background-color: #0a0a1a;
+      color: #00ffff;
+      font-family: 'Courier New', monospace;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+      line-height: 1.6;
+      text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+    }
+    
+    #globalStatus {
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 20px;
+      color: #00ffff;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      background: linear-gradient(90deg, #00ffff, #00ff91);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: glitch 1s infinite alternate;
+    }
+    
+    @keyframes glitch {
+      0% {
+        text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+      }
+      100% {
+        text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+      }
+    }
+    
+    .controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      align-items: center;
+      flex-wrap: wrap;
+      background-color: rgba(0, 0, 30, 0.7);
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid #00ffff;
+    }
+    
+    .controls input, 
+    .controls select {
+      background-color: #001a2a;
+      color: #00ffff;
+      border: 1px solid #00ffff;
+      padding: 5px;
+      border-radius: 3px;
+      transition: all 0.3s ease;
+    }
+    
+    .controls input:focus, 
+    .controls select:focus {
+      outline: none;
+      box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    }
+    
+    button {
+      background-color: #00ffff;
+      color: #000;
+      border: none;
+      padding: 8px 15px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: bold;
+    }
+    
+    button:hover {
+      background-color: #00ff91;
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+    }
+    
+    .neuron {
+      stroke: rgba(0, 255, 255, 0.5);
+      stroke-width: 3px;
+      transition: all 0.1s ease;
+    }
+    
+    .neuron:hover {
+      stroke: #00ffff;
+      stroke-width: 4px;
+    }
+    
+    .connection {
+      stroke: rgba(0, 255, 255, 0.3);
+      stroke-width: 3px;
+      opacity: 0.7;
+      transition: all 0.3s ease;
+    }
+    
+    .input-neuron { 
+      fill: #0077ff; 
+      filter: drop-shadow(0 0 5px #0077ff);
+    }
+    
+    .hidden-neuron { 
+      fill: #ff3366; 
+      filter: drop-shadow(0 0 5px #ff3366);
+    }
+    
+    .output-neuron { 
+      fill: #00ff91; 
+      filter: drop-shadow(0 0 5px #00ff91);
+    }
+    
+    svg {
+      background-color: rgba(0, 0, 30, 0.5);
+      border-radius: 100px;
+      width: 100%;
+      border: 1px solid #00ffff;
+    }
+    
+    #status {
+      margin-top: 20px;
+      font-size: 16px;
+      color: #00ff91;
+      text-align: center;
+      background-color: rgba(0, 0, 30, 0.7);
+      padding: 10px;
+      border-radius: 5px;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    
+    
+    @keyframes flicker {
+      0% { opacity: 0.5; }
+      100% { opacity: 0.8; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div id="globalStatus">{{ globalStatus }}</div>
+
+    <div class="controls">
+      <div class="input-group">
+        <label>Network Configuration</label>
+        <input type="text" v-model="neuronConfig" placeholder="e.g., 3,4,2 (input, hidden, output)">
+      </div>
+
+      <div class="input-group">
+        <label>Activation Function</label>
+        <select v-model="activationFunction">
+          <option value="sigmoid">Sigmoid</option>
+          <option value="relu">ReLU</option>
+          <option value="tanh">Tanh</option>
+          <option value="leakyRelu">Leaky ReLU</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label>Loss Function</label>
+        <select v-model="lossFunction">
+          <option value="mse">Mean Squared Error</option>
+          <option value="crossEntropy">Cross Entropy</option>
+          <option value="binaryCrossEntropy">Binary Cross Entropy</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label>Input Values</label>
+        <input type="text" v-model="inputValues" placeholder="fn">
+      </div>
+
+      <div class="input-group">
+        <label>Target Values</label>
+        <input type="text" v-model="targetValues" placeholder="fn">
+      </div>
+
+      <button @click="visualize">Plot</button>
+      <button @click="train">Start</button>
+      <button @click="stopTraining">Stop</button>
+      <button @click="resetNetwork">Reset</button>
+    </div>
+<!-- 
+    <div id="inputOutputDetails">
+      <div class="input-output-section">
+        <h3>Input Neurons</h3>
+        <div v-for="(input, index) in inputs" :key="'input-' + index">
+          Input {{ index + 1 }}: {{ input }}
+        </div>
+      </div>
+      <div class="input-output-section">
+        <h3>Output Neurons</h3>
+        <div v-for="(target, index) in targets" :key="'target-' + index">
+          Target {{ index + 1 }}: {{ target }}
+        </div>
+      </div>
+    </div> -->
+
+    <svg width="800" height="500"></svg>
+
+    <div id="status">{{ status }}</div>
+  </div>
+
+  <script>
+    new Vue({
+      el: '#app',
+      data() {
+        return {
+          neuronConfig: '3,4,2',
+          activationFunction: 'sigmoid',
+          lossFunction: 'mse',
+          inputValues: '{i} + {t}',
+          targetValues: '{i} + {t}',
+          globalStatus: 'Neural Network Visualization',
+          status: 'No training in progress.',
+          inputs: [1,1,1],
+          targets: [1,1],
+          layers: [],
+          nodes: [],
+          links: [],
+          svg: null,
+          epoch: 0,
+          weights: null,
+          nodeRadius: 10,
+          nodeSpacing: 50,
+          isTraining: false,
+          interval: null,
+        };
+      },
+      computed: {
+        lossFunctions() {
+          return {
+            mse: (targets, predictions) =>
+              targets.reduce((sum, target, i) => sum + Math.pow(target - predictions[i], 2), 0) / targets.length,
+            crossEntropy: (targets, predictions) =>
+              -targets.reduce((sum, target, i) => sum + target * Math.log(predictions[i] + 1e-15), 0),
+            binaryCrossEntropy: (targets, predictions) =>
+              -(targets.reduce((sum, target, i) =>
+                sum + target * Math.log(predictions[i] + 1e-15) + 
+                (1 - target) * Math.log(1 - predictions[i] + 1e-15), 0))
+          };
+        },
+        activationFunctions() {
+          return {
+            sigmoid: x => 1 / (1 + Math.exp(-x)),
+            relu: x => Math.max(0, x),
+            tanh: x => Math.tanh(x),
+            leakyRelu: x => x > 0 ? x : 0.01 * x,
+          };
+        }
+      },
+      methods: {
+        visualize() {
+          
+
+          const config = this.neuronConfig.split(',').map(Number);
+          
+          const first_layer = config[0];
+          const last_layer = config[config.length-1];
+          
+          this.inputs = []
+          this.targets = []
+
+          //const inputFunction = new Function('i', 't', `return ${this.inputValues}`);
+          //const targetFunction = new Function('i', 't', `return ${this.targetValues}`);
+          
+          console.log(this.epoch)
+          let t = this.epoch
+
+
+
+          for (let i = 0; i < first_layer; i++) {
+            let input_eval = this.inputValues.replace("{t}", t).replace("{i}", i);
+
+            this.inputs.push(eval(input_eval))
+          }
+          
+          for (let i = 0; i < last_layer; i++) {
+            let target_eval = this.targetValues.replace("{t}", t).replace("{i}", i);
+
+            this.targets.push(eval(target_eval))
+          }
+
+
+          //this.inputs = this.inputValues.split(',').map(Number);
+          //this.targets = this.targetValues.split(',').map(Number);
+          
+          if (config.length < 3) {
+            alert('Invalid input format. Please enter at least one hidden layer.');
+            return;
+          }
+
+          this.svg = d3.select('svg');
+          this.svg.selectAll('*').remove(); // Clear previous drawing
+
+          const layerWidth = this.svg.attr('width') / (config.length + 1);
+          this.layers = config.map((layerSize, layerIndex) => 
+            Array.from({ length: layerSize }, (_, nodeIndex) => ({
+              type: layerIndex === 0 ? 'input' : layerIndex === config.length - 1 ? 'output' : 'hidden',
+              layer: layerIndex,
+              index: nodeIndex,
+              activation: layerIndex === 0 ? this.inputs[nodeIndex] : 0
+            }))
+          );
+
+          this.nodes = this.layers.flat();
+          this.links = [];
+
+          // Create links between layers
+          for (let i = 0; i < this.layers.length - 1; i++) {
+            for (const source of this.layers[i]) {
+              for (const target of this.layers[i + 1]) {
+                this.links.push({ source, target });
+              }
+            }
+          }
+
+          // Set positions for each node
+          this.layers.forEach((layer, layerIndex) => {
+            const layerX = (layerIndex + 1) * layerWidth;
+            const layerHeight = this.svg.attr('height');
+            const layerYStart = (layerHeight - layer.length * this.nodeSpacing) / 2;
+
+            layer.forEach((node, nodeIndex) => {
+              node.x = layerX;
+              node.y = layerYStart + nodeIndex * this.nodeSpacing;
+            });
+          });
+
+          // Create the simulation with forces for the nodes
+          const simulation = d3.forceSimulation(this.nodes)
+            .force('link', d3.forceLink(this.links).id(d => d.index).distance(120))
+            .force('charge', d3.forceManyBody().strength(-100))
+            .force('center', d3.forceCenter(this.svg.attr('width') / 2, this.svg.attr('height') / 2))
+            .on('tick', this.ticked);
+
+          this.globalStatus = `Neural Network: ${config.join('-')} | Activation: ${this.activationFunction} | Loss: ${this.lossFunction}`;
+        },
+
+        ticked() {
+          this.svg.selectAll('.connection')
+            .data(this.links)
+            .join('line')
+            .attr('class', 'connection')
+            .attr('x1', d => d.source.x)
+            .attr('y1', d => d.source.y)
+            .attr('x2', d => d.target.x)
+            .attr('y2', d => d.target.y)
+            .style('stroke', d => this.getRainbowColor(d.source.activation * d.target.activation));
+
+          this.svg.selectAll('.neuron')
+            .data(this.nodes)
+            .join('circle')
+            .attr('class', d => `neuron ${d.type}-neuron`)
+            .attr('r', this.nodeRadius)
+            .attr('cx', d => d.x)
+            .attr('cy', d => d.y)
+            .style('fill', d => this.getRainbowColor(d.activation))
+            .append('title')
+            .text(d => `${d.type.charAt(0).toUpperCase() + d.type.slice(1)} Neuron ${d.index}: Activation = ${d.activation}`);
+        },
+
+        getRainbowColor1(value) {
+          const normalized = (value + 1) / 2;
+          const hue = normalized * 360;
+          return `hsl(${hue}, 100%, 50%)`;
+        },
+        getRainbowColor(value) {
+          const numSteps = 10; // Number of discrete color steps
+          
+          // Quantize the value into discrete steps
+          let quantizedValue = Math.floor(Math.abs(value) * numSteps);
+          quantizedValue = Math.min(quantizedValue, numSteps - 1); // Ensure it doesn't exceed the maximum step
+        
+          let color;
+        
+          if (value < 0) {
+            // Negative values (red shades)
+            color = d3.scaleLinear()
+              .domain([0, numSteps - 1])
+              .range(['#ffcccc', '#ff0000']); // Light red to dark red
+          } else {
+            // Positive values (green shades)
+            color = d3.scaleLinear()
+              .domain([0, numSteps - 1])
+              .range(['#ccffcc', '#008000']); // Light green to dark green
+          }
+        
+          return color(quantizedValue);
+        }
+        ,
+
+
+        train() {
+          if (this.isTraining) return;
+
+          const activationFunc = this.activationFunctions[this.activationFunction];
+          const lossFunc = this.lossFunctions[this.lossFunction];
+
+          this.isTraining = true;
+          this.epoch = 0;
+          this.globalStatus = `Training Neural Network | Activation: ${this.activationFunction} | Loss: ${this.lossFunction}`;
+          this.status = 'Epoch: 0 | Loss: Calculating...';
+
+          this.weights = this.layers.slice(0, -1).map((layer, i) => 
+            layer.map(() => Array.from({ length: this.layers[i + 1].length }, () => Math.random() * 2 - 1))
+          );
+
+          this.interval = setInterval(() => {
+            this.epoch++;
+            this.forwardPass(activationFunc);
+            this.updateStatus(lossFunc);
+            this.updateVisualization();
+          }, 100);
+        },
+
+        forwardPass(activationFunc) {
+          for (let i = 0; i < this.layers.length - 1; i++) {
+            const inputLayer = this.layers[i];
+            const outputLayer = this.layers[i + 1];
+            outputLayer.forEach((node, targetIndex) => {
+              node.activation = inputLayer.reduce((sum, inputNode, inputIndex) => {
+                return sum + inputNode.activation * this.weights[i][inputIndex][targetIndex];
+              }, 0);
+              node.activation = activationFunc(node.activation);
+            });
+          }
+        },
+
+        updateStatus(lossFunc) {
+          const predictions = this.layers[this.layers.length - 1].map(node => node.activation);
+          const loss = lossFunc(this.targets, predictions);
+          this.globalStatus = `Epoch: ${this.epoch} | Loss: ${loss} | Activation: ${this.activationFunction}`;
+          this.status = `Input: ${this.inputs.join(', ')} | Output: ${predictions.map(p => p).join(', ')}`;
+        },
+
+        updateVisualization() {
+          this.svg.selectAll('.neuron')
+            .data(this.nodes)
+            .style('fill', d => this.getRainbowColor(d.activation))
+
+            .select('title')
+            .text(d => `${d.type.charAt(0).toUpperCase() + d.type.slice(1)} Neuron ${d.index}: Activation = ${d.activation}`);
+        
+
+        },
+
+        stopTraining() {
+          this.isTraining = false;
+          clearInterval(this.interval);
+          this.globalStatus = 'Training Stopped';
+          this.status = 'Training stopped.';
+        },
+
+        resetNetwork() {
+          this.stopTraining();
+          this.globalStatus = 'Neural Network Visualization';
+          this.status = 'Network Reset.';
+          this.visualize();
+        }
+      },
+
+      created() {
+        this.visualize();
+      }
+    });
+  </script>
+</body>
+</html>

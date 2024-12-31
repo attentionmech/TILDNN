@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,6 @@
   <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <style>
-
     footer {
       background-color: #000;
       color: white;
@@ -16,18 +16,23 @@
       position: fixed;
       bottom: 0;
       width: 35%;
-      font-size: 10px; /* Smaller font size */
-  }
-  footer a {
-      color: #00aced; /* Twitter blue color */
+      font-size: 10px;
+      /* Smaller font size */
+    }
+
+    footer a {
+      color: #00aced;
+      /* Twitter blue color */
       text-decoration: none;
       margin: 5px;
-  }
-  footer a:hover {
+    }
+
+    footer a:hover {
       text-decoration: underline;
-  }
+    }
+
     .social-icons {
-        font-size: 20px;
+      font-size: 20px;
     }
 
     body {
@@ -40,7 +45,7 @@
       line-height: 1.6;
       text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
     }
-    
+
     #globalStatus {
       font-size: 18px;
       font-weight: bold;
@@ -54,16 +59,17 @@
       -webkit-text-fill-color: transparent;
       animation: glitch 1s infinite alternate;
     }
-    
+
     @keyframes glitch {
       0% {
         text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
       }
+
       100% {
         text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
       }
     }
-    
+
     .controls {
       display: flex;
       gap: 10px;
@@ -75,8 +81,8 @@
       border-radius: 10px;
       border: 1px solid #00ffff;
     }
-    
-    .controls input, 
+
+    .controls input,
     .controls select {
       background-color: #001a2a;
       color: #00ffff;
@@ -85,13 +91,13 @@
       border-radius: 3px;
       transition: all 0.3s ease;
     }
-    
-    .controls input:focus, 
+
+    .controls input:focus,
     .controls select:focus {
       outline: none;
       box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
     }
-    
+
     button {
       background-color: #00ffff;
       color: #000;
@@ -101,53 +107,53 @@
       transition: all 0.3s ease;
       font-weight: bold;
     }
-    
+
     button:hover {
       background-color: #00ff91;
       transform: scale(1.05);
       box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
     }
-    
+
     .neuron {
       stroke: rgba(0, 255, 255, 0.5);
       stroke-width: 3px;
       transition: all 0.1s ease;
     }
-    
+
     .neuron:hover {
       stroke: #00ffff;
       stroke-width: 4px;
     }
-    
+
     .connection {
       stroke: rgba(0, 255, 255, 0.3);
       stroke-width: 3px;
       opacity: 0.7;
       transition: all 0.3s ease;
     }
-    
-    .input-neuron { 
-      fill: #0077ff; 
+
+    .input-neuron {
+      fill: #0077ff;
       filter: drop-shadow(0 0 5px #0077ff);
     }
-    
-    .hidden-neuron { 
-      fill: #ff3366; 
+
+    .hidden-neuron {
+      fill: #ff3366;
       filter: drop-shadow(0 0 5px #ff3366);
     }
-    
-    .output-neuron { 
-      fill: #00ff91; 
+
+    .output-neuron {
+      fill: #00ff91;
       filter: drop-shadow(0 0 5px #00ff91);
     }
-    
+
     svg {
       background-color: rgba(0, 0, 30, 0.5);
       border-radius: 100px;
       width: 100%;
       border: 1px solid #00ffff;
     }
-    
+
     #status {
       margin-top: 20px;
       font-size: 16px;
@@ -157,20 +163,34 @@
       padding: 10px;
       border-radius: 5px;
     }
-    
+
     @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.05);
+      }
+
+      100% {
+        transform: scale(1);
+      }
     }
-    
-    
+
+
     @keyframes flicker {
-      0% { opacity: 0.5; }
-      100% { opacity: 0.8; }
+      0% {
+        opacity: 0.5;
+      }
+
+      100% {
+        opacity: 0.8;
+      }
     }
   </style>
 </head>
+
 <body>
   <div id="app">
     <div id="globalStatus">{{ globalStatus }}</div>
@@ -208,16 +228,16 @@
       <div class="input-group">
         <label>Target Values</label>
         <input type="text" v-model="targetValues" placeholder="fn">
-      
+
       </div>
       <div>
-        <button @click="visualize">Plot</button>
-        <button @click="train">Start</button>
-        <button @click="stopTraining">Stop</button>
+        <button @click="visualize">Plot Network</button>
+        <button @click="train">Start Training</button>
+        <button @click="stopTraining">Stop Training</button>
         <button @click="resetNetwork">Reset</button>
-      </div>  
+      </div>
     </div>
-<!-- 
+    <!-- 
     <div id="inputOutputDetails">
       <div class="input-output-section">
         <h3>Input Neurons</h3>
@@ -258,8 +278,8 @@
           targetValues: '{i} + {t}',
           globalStatus: 'Neural Network Visualization',
           status: 'No training in progress.',
-          inputs: [1,1,1],
-          targets: [1,1],
+          inputs: [1, 1, 1],
+          targets: [1, 1],
           layers: [],
           nodes: [],
           links: [],
@@ -281,7 +301,7 @@
               -targets.reduce((sum, target, i) => sum + target * Math.log(predictions[i] + 1e-15), 0),
             binaryCrossEntropy: (targets, predictions) =>
               -(targets.reduce((sum, target, i) =>
-                sum + target * Math.log(predictions[i] + 1e-15) + 
+                sum + target * Math.log(predictions[i] + 1e-15) +
                 (1 - target) * Math.log(1 - predictions[i] + 1e-15), 0))
           };
         },
@@ -296,19 +316,19 @@
       },
       methods: {
         visualize() {
-          
+
 
           const config = this.neuronConfig.split(',').map(Number);
-          
+
           const first_layer = config[0];
-          const last_layer = config[config.length-1];
-          
+          const last_layer = config[config.length - 1];
+
           this.inputs = []
           this.targets = []
 
           //const inputFunction = new Function('i', 't', `return ${this.inputValues}`);
           //const targetFunction = new Function('i', 't', `return ${this.targetValues}`);
-          
+
           console.log(this.epoch)
           let t = this.epoch
 
@@ -319,7 +339,7 @@
 
             this.inputs.push(eval(input_eval))
           }
-          
+
           for (let i = 0; i < last_layer; i++) {
             let target_eval = this.targetValues.replace("{t}", t).replace("{i}", i);
 
@@ -329,7 +349,7 @@
 
           //this.inputs = this.inputValues.split(',').map(Number);
           //this.targets = this.targetValues.split(',').map(Number);
-          
+
           if (config.length < 3) {
             alert('Invalid input format. Please enter at least one hidden layer.');
             return;
@@ -339,7 +359,7 @@
           this.svg.selectAll('*').remove(); // Clear previous drawing
 
           const layerWidth = this.svg.attr('width') / (config.length + 1);
-          this.layers = config.map((layerSize, layerIndex) => 
+          this.layers = config.map((layerSize, layerIndex) =>
             Array.from({ length: layerSize }, (_, nodeIndex) => ({
               type: layerIndex === 0 ? 'input' : layerIndex === config.length - 1 ? 'output' : 'hidden',
               layer: layerIndex,
@@ -412,13 +432,13 @@
         },
         getRainbowColor(value) {
           const numSteps = 10; // Number of discrete color steps
-          
+
           // Quantize the value into discrete steps
           let quantizedValue = Math.floor(Math.abs(value) * numSteps);
           quantizedValue = Math.min(quantizedValue, numSteps - 1); // Ensure it doesn't exceed the maximum step
-        
+
           let color;
-        
+
           if (value < 0) {
             // Negative values (red shades)
             color = d3.scaleLinear()
@@ -430,7 +450,7 @@
               .domain([0, numSteps - 1])
               .range(['#ccffcc', '#008000']); // Light green to dark green
           }
-        
+
           return color(quantizedValue);
         }
         ,
@@ -447,7 +467,7 @@
           this.globalStatus = `Training Neural Network | Activation: ${this.activationFunction} | Loss: ${this.lossFunction}`;
           this.status = 'Epoch: 0 | Loss: Calculating...';
 
-          this.weights = this.layers.slice(0, -1).map((layer, i) => 
+          this.weights = this.layers.slice(0, -1).map((layer, i) =>
             layer.map(() => Array.from({ length: this.layers[i + 1].length }, () => Math.random() * 2 - 1))
           );
 
@@ -486,7 +506,7 @@
 
             .select('title')
             .text(d => `${d.type.charAt(0).toUpperCase() + d.type.slice(1)} Neuron ${d.index}: Activation = ${d.activation}`);
-        
+
 
         },
 
@@ -511,4 +531,5 @@
     });
   </script>
 </body>
+
 </html>

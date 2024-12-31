@@ -8,12 +8,11 @@
   <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <style>
-
     header {
       text-align: center;
       margin-top: 20px;
     }
-    
+
     header h1 {
       font-size: 36px;
       color: #00ffff;
@@ -22,7 +21,7 @@
       text-shadow: 0 0 10px rgba(0, 255, 255, 0.8), 0 0 20px rgba(0, 255, 255, 0.6), 0 0 30px rgba(0, 255, 255, 0.4);
       animation: glitch 1s infinite alternate;
     }
-    
+
 
     footer {
       background-color: #000;
@@ -217,7 +216,7 @@
       align-items: center;
       z-index: 1000;
     }
-  
+
     .modal-content {
       background-color: #333;
       color: #00ffff;
@@ -227,18 +226,18 @@
       max-height: 80%;
       overflow-y: auto;
     }
-  
+
     .modal-content h2 {
       text-align: center;
       margin-bottom: 20px;
     }
-  
+
     .modal-content p,
     .modal-content ul {
       margin: 10px 0;
       font-size: 16px;
     }
-  
+
     .close-btn {
       color: #00ffff;
       font-size: 30px;
@@ -247,11 +246,10 @@
       right: 20px;
       cursor: pointer;
     }
-  
+
     .close-btn:hover {
       color: #ff3366;
     }
-
   </style>
 </head>
 
@@ -308,24 +306,38 @@
       </div>
     </div>
     <!-- Modal for Help -->
-<div v-if="isHelpVisible" class="help-modal">
-  <div class="modal-content">
-    <span class="close-btn" @click="closeHelp">&times;</span>
-    <h2>How to Use the Neural Network Visualization</h2>
-    <p><strong>Network Configuration:</strong> Specify the number of neurons in each layer, e.g., "3,4,2" for 3 input, 4 hidden, and 2 output neurons.</p>
-    <p><strong>Activation Function:</strong> Choose the activation function (Sigmoid, ReLU, Tanh, or Leaky ReLU) used for the neurons.</p>
-    <p><strong>Loss Function:</strong> Choose the loss function for training (Mean Squared Error, Cross Entropy, or Binary Cross Entropy).</p>
-    <p><strong>Input Values:</strong> Enter the input values in a function format (e.g., `{i} + {t}`). t is time and i is index of neuron on input layer. You can use javascript within curlies.</p>
-    <p><strong>Target Values:</strong> Enter the target values in a function format (e.g., `{i} + {t}`). t is time and i is index of neuron on input layer. You can use javascript within curlies.</p>
-    <p><strong>Buttons:</strong></p>
-    <ul>
-      <li><strong>Plot:</strong> Visualizes the neural network with the specified configuration.</li>
-      <li><strong>Start:</strong> Starts the training process.</li>
-      <li><strong>Stop:</strong> Stops the ongoing training process.</li>
-      <li><strong>Reset:</strong> Resets the neural network.</li>
-    </ul>
-  </div>
-</div>
+    <div v-if="isHelpVisible" class="help-modal">
+      <div class="modal-content">
+        <span class="close-btn" @click="closeHelp">&times;</span>
+        <h2>Manual</h2>
+        <p><strong>Network Configuration:</strong> Specify the number of neurons in each layer, e.g., "3,4,2" for 3
+          input, 4 hidden, and 2 output neurons.</p>
+        <p><strong>Activation Function:</strong> Choose the activation function (Sigmoid, ReLU, Tanh, or Leaky ReLU)
+          used for the neurons.</p>
+        <p><strong>Loss Function:</strong> Choose the loss function for training (Mean Squared Error, Cross Entropy, or
+          Binary Cross Entropy).</p>
+        <p><strong>Input Values:</strong> Enter the input values in a function format (e.g., `{i} + {t}`). t is time and
+          i is index of neuron on input layer. You can use javascript within curlies.</p>
+        <p><strong>Target Values:</strong> Enter the target values in a function format (e.g., `{i} + {t}`). t is time
+          and i is index of neuron on input layer. You can use javascript within curlies.</p>
+        <p><strong>Buttons:</strong></p>
+        <ul>
+          <li><strong>Plot:</strong> Visualizes the neural network with the specified configuration.</li>
+          <li><strong>Start:</strong> Starts the training process.</li>
+          <li><strong>Stop:</strong> Stops the ongoing training process.</li>
+          <li><strong>Reset:</strong> Resets the neural network.</li>
+        </ul>
+        <h2>Symbolism</h2>
+        <p><strong>Nodes (Neurons):</strong> The color of each node represents its <strong>activation value</strong>.
+          Green indicates a strong positive activation, red indicates a negative activation, and neutral or no color
+          suggests low or zero activation.</p>
+        <p><strong>Weights (Connections):</strong> The color of the weights represents their <strong>magnitude and
+            sign</strong>. Green lines indicate positive weights (amplifying the signal), while red lines represent
+          negative weights (dampening the signal). The intensity of the color reflects the strength of the connection.
+        </p>
+
+      </div>
+    </div>
 
     <!-- 
     <div id="inputOutputDetails">
@@ -411,7 +423,7 @@
         showHelp() {
           this.isHelpVisible = true;
         },
-    
+
         closeHelp() {
           this.isHelpVisible = false;
         },

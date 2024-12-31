@@ -375,7 +375,7 @@
       el: '#app',
       data() {
         return {
-          neuronConfig: '3,4,2',
+          neuronConfig: '3,4,8,8,2',
           activationFunction: 'sigmoid',
           lossFunction: 'mse',
           inputValues: '{i} + {t}',
@@ -420,6 +420,11 @@
           };
         }
       },
+
+      mounted() {
+        this.visualize();
+      },
+
       methods: {
 
         showHelp() {

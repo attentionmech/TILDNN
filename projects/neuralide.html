@@ -208,12 +208,14 @@
       <div class="input-group">
         <label>Target Values</label>
         <input type="text" v-model="targetValues" placeholder="fn">
+      
       </div>
-
-      <button @click="visualize">Plot</button>
-      <button @click="train">Start</button>
-      <button @click="stopTraining">Stop</button>
-      <button @click="resetNetwork">Reset</button>
+      <div>
+        <button @click="visualize">Plot</button>
+        <button @click="train">Start</button>
+        <button @click="stopTraining">Stop</button>
+        <button @click="resetNetwork">Reset</button>
+      </div>  
     </div>
 <!-- 
     <div id="inputOutputDetails">

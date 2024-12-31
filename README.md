@@ -8,7 +8,7 @@ Today I Learned // Deep Neural Nets
 
 ## projects
 
-- [Toy Neural Net Visualizer](projects/tnnv.html)
+- [Toy Neural Net Visualizer](projects/neuralide.html)
 
 ## links
 - [twitter](https://x.com/attentionmech)

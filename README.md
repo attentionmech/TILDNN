@@ -1,6 +1,6 @@
 # TILDNN
 
-Today I Learned // Deep Neural Nets
+TIL / Deep Neural Nets
 
 ## posts
 

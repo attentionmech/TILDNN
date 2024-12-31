@@ -4,10 +4,26 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Advanced Neural Network Visualization</title>
+  <title>Toy Neural Net Visualizer</title>
   <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <style>
+
+    header {
+      text-align: center;
+      margin-top: 20px;
+    }
+    
+    header h1 {
+      font-size: 36px;
+      color: #00ffff;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px rgba(0, 255, 255, 0.8), 0 0 20px rgba(0, 255, 255, 0.6), 0 0 30px rgba(0, 255, 255, 0.4);
+      animation: glitch 1s infinite alternate;
+    }
+    
+
     footer {
       background-color: #000;
       color: white;
@@ -238,6 +254,11 @@
 
   </style>
 </head>
+
+<header>
+  <h1>Toy Neural Net Visualiser</h1>
+</header>
+
 
 <body>
   <div id="app">

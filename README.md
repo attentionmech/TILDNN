@@ -13,4 +13,3 @@ Today I Learned // Deep Neural Nets
 ## links
 - [twitter](https://x.com/attentionmech)
 - [github](https://github.com/attentionmech)
-- [cracked-org](https://github.com/cracked-org)

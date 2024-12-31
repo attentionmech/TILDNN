@@ -11,5 +11,7 @@ Today I Learned // Deep Neural Nets
 - [Toy Neural Net Visualizer](projects/neuralide.html)
 
 ## links
-- [twitter](https://x.com/attentionmech)
-- [github](https://github.com/attentionmech)
+
+- [Github](https://github.com/attentionmech)
+- [X](https://x.com/attentionmech)
+

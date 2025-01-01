@@ -8,6 +8,7 @@
 
 ## links
 
-- [Github](https://github.com/attentionmech)
 - [X](https://x.com/attentionmech)
+- [Thought Journal](attentionmech.blog)
+
 

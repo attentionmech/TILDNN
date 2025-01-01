@@ -9,6 +9,6 @@
 ## links
 
 - [X](https://x.com/attentionmech)
-- [Thought Journal](attentionmech.blog)
+- [Thought Journal](https://www.attentionmech.blog)
 
 

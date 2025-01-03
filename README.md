@@ -10,9 +10,15 @@
 
 <br>
 
-## links
+## musings
+
+- [ammusings](https://www.attentionmech.blog)
+
+<br>
+
+## socials
 
 - [X](https://x.com/attentionmech)
-- [Thought Journal](https://www.attentionmech.blog)
+
 
 

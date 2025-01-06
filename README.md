@@ -7,10 +7,12 @@
 ## projects
 
 - [Toy Neural Net Visualizer](projects/neuralide.html)
+- [Small Transformer Implementation](https://github.com/attentionmech/tiny-transformer)
+- [Collecting Manim Examples](https://github.com/cracked-org/crack-manim)
 
 <br>
 
-## musings
+## personal musings
 
 - [ammusings](https://www.attentionmech.blog)
 

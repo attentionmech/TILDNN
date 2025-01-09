@@ -8,7 +8,8 @@
 
 - [Toy Neural Net Visualizer](projects/neuralide.html)
 - [Small Transformer Implementation](https://github.com/attentionmech/tiny-transformer)
-- [Collecting Manim Examples](https://github.com/cracked-org/crack-manim)
+- [Collecting Manim Examples](cracked-org.github.io/crack-manim/)
+- [GPT in C](https://github.com/attentionmech/gpt.c)
 
 <br>
 

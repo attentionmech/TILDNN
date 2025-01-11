@@ -10,6 +10,7 @@
 - [Small Transformer Implementation](https://github.com/attentionmech/tiny-transformer)
 - [Collecting Manim Examples](https://cracked-org.github.io/crack-manim/)
 - [GPT in C](https://github.com/attentionmech/gpt.c)
+- [transcope](https://github.com/attentionmech/transcope)
 
 <br>
 
